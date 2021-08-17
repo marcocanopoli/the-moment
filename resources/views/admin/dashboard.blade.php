@@ -14,9 +14,13 @@
                         </div>
                     @endif
 
-                    {{ __('Hi ') }}
-                    {{ Auth::user()->name }}
-                    {{ __(', you are logged in') }}
+                    <span>{{ __('Hi, you are logged in') }}</span>
+                    <div class="pt-4">
+                        <h3>ID: {{ Auth::user()->id }}</h3>
+                        <h1>{{ Auth::user()->name }}</h1>
+                        <h2>{{ Auth::user()->email }}</h2>
+                    </div>
+
                 </div>
             </div>
         </div>

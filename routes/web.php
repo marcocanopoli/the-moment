@@ -25,6 +25,7 @@ Route::middleware('auth')
     
     Route::get('/', 'HomeController@index')->name('dashboard');
     Route::resource('products', 'ProductController');
+    Route::resource('anime', 'AnimeController')->except('show');
 });
 
 Route::get('{any?}', 'HomeController@index')->where('any', '.*')->name('home');

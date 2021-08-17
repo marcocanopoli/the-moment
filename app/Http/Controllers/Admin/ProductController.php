@@ -24,7 +24,7 @@ class ProductController extends Controller
     ];
 
     private $validation = [
-        'thumb' => 'required|mimes:jpeg,jpg,png,bmp,gif,svg,webp|max:5120',
+        'thumb' => 'mimes:jpeg,jpg,png,bmp,gif,svg,webp|max:5120',
         'name' => 'required|max:100',
         'anime' => 'exists:anime,id',
         'desc' => 'nullable',
@@ -40,14 +40,14 @@ class ProductController extends Controller
         $string = $anime->name . ' ' . $data['name'] . ' ' . $data['color'];
         $slug = Str::slug($string, '-');
 
-        $existingProduct = Product::where('slug', $slug)->first();
+        $existingProduct = Product::where('slug', $slug)->count();
 
         $slugString = $slug;
         $counter = 1;
 
-        while($existingProduct) {
+        while($existingProduct >= 1) {
             $slug = $slugString . "-" . $counter;
-            $existingProduct = Product::where('slug', $slug)->first();
+            $existingProduct = Product::where('slug', $slug)->count();
             $counter++;
         }
 
@@ -65,7 +65,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::paginate(10);
+        // $products = Product::all();
         return view('admin.products.index', compact('products'));
     }
 
@@ -170,7 +171,9 @@ class ProductController extends Controller
         //replace categories
         if (array_key_exists('categories', $data)) {
             $product->categories()->sync($data['categories']);
-        }
+        } else {
+            $product->categories()->detach();
+        } 
 
         return redirect()
             ->route('admin.products.show', $product->id)

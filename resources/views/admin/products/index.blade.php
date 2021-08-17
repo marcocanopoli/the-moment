@@ -13,6 +13,7 @@
                 <tr>
                     <th>Thumbnail</th>
                     <th>Categories</th>
+                    <th>ID</th>
                     <th>Anime</th>
                     <th>Name</th>
                     <th>Slug</th>
@@ -34,6 +35,7 @@
                                 <span class="badge rounded-pill bg-warning">No category</span>
                             @endforelse
                         </td>
+                        <td>{{ $product->id }}</td>
                         <td>{{ $product->anime->name }}</td>
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->slug }}</td>
@@ -63,6 +65,7 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="pagination d-flex justify-content-center pt-4">{{ $products->links() }}</div>
     </div>
     
 @endsection
