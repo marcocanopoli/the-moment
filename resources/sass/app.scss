@@ -6,3 +6,43 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.my-btn {
+    color: $white;
+}
+
+.my-file-input {
+    
+    &::file-selector-button {
+        color: $white;
+        background-color: $blue;        
+    }
+
+    &:hover:not(:disabled):not([readonly])::file-selector-button {
+        background-color: $blue-600;
+    }
+}
+
+//product index view
+.prod-index-thumb {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+.prod-index-cat {
+    object-fit: cover;
+    height: 30px;
+    width: 30px;
+}
+
+//product show view
+.prod-show-thumb {
+    width: 100%;
+    vertical-align: unset;
+}
+
+//product edit view
+.prod-edit-thumb {
+    max-width: 50%;
+    max-height: 450px;
+}
