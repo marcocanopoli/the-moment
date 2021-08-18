@@ -103,7 +103,7 @@ class ProductController extends Controller
         $data['slug'] = $slug;
         
         if (array_key_exists('thumb', $data)) {
-            $data['thumb'] = Storage::disk('public')->put('thumbnails', $data['thumb']);
+            $data['thumb'] = Storage::disk('public')->put('products/thumbnails', $data['thumb']);
         }        
         
         // dd($data);
@@ -174,7 +174,7 @@ class ProductController extends Controller
             if ($product->thumb){
                 Storage::delete($product->thumb);
             }
-            $data['thumb'] = Storage::disk('public')->put ('thumbnails', $data['thumb']);
+            $data['thumb'] = Storage::disk('public')->put ('products/thumbnails', $data['thumb']);
         }
 
         //replace & delete product imgs

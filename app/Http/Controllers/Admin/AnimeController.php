@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Anime;
 
 class AnimeController extends Controller
 {
-    private $validation = [
-        'name' => 'unique:anime,name'
-    ];
     /**
      * Display a listing of the resource.
      *
@@ -41,7 +39,11 @@ class AnimeController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $request->validate($this->validation);
+        $request->validate(
+            [
+                'name' => Rule::unique('anime')
+            ]
+        );
         $newAnime = new Anime();
         $newAnime->fill($data);
         $newAnime->save();
@@ -72,7 +74,11 @@ class AnimeController extends Controller
     public function update(Request $request, Anime $anime)
     {
         $data = $request->all();
-        $request->validate($this->validation);
+        $request->validate(
+            [
+                'name' => Rule::unique('anime')->ignore($anime->name, 'name')
+            ]
+        );
         $anime->update($data);
 
         return redirect()

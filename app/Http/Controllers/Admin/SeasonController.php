@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Season;
 
 class SeasonController extends Controller
 {
-    private $validation = [
-        'name' => 'unique:seasons,name'
-    ];
     /**
      * Display a listing of the resource.
      *
@@ -41,7 +39,11 @@ class SeasonController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $request->validate($this->validation);
+        $request->validate(
+            [
+                'name' => Rule::unique('seasons')
+            ]
+        );
         $newSeason = new Season();
         $newSeason->fill($data);
         $newSeason->save();
@@ -72,7 +74,11 @@ class SeasonController extends Controller
     public function update(Request $request, Season $season)
     {
         $data = $request->all();
-        $request->validate($this->validation);
+        $request->validate(
+            [
+                'name' => Rule::unique('seasons')->ignore($season->name, 'name')
+            ]
+        );
         $season->update($data);
 
         return redirect()
