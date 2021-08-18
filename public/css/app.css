@@ -12196,6 +12196,10 @@ fieldset:disabled .btn {
   vertical-align: unset;
 }
 
+.prod-show-img {
+  height: 150px;
+}
+
 .prod-edit-thumb {
   max-width: 50%;
   max-height: 450px;

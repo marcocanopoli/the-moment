@@ -10,6 +10,7 @@ use App\Product;
 use App\Category;
 use App\Season;
 use App\Anime;
+use App\ProdImg;
 
 class ProductController extends Controller
 {   
@@ -24,7 +25,8 @@ class ProductController extends Controller
     ];
 
     private $validation = [
-        'thumb' => 'mimes:jpeg,jpg,png,bmp,gif,svg,webp|max:5120',
+        'thumb' => 'nullable|mimes:jpeg,jpg,png,bmp,gif,svg,webp|max:5120',
+        'prod_imgs.*' => 'mimes:jpeg,jpg,png,bmp,gif,svg,webp|max:5120',
         'name' => 'required|max:100',
         'anime' => 'exists:anime,id',
         'desc' => 'nullable',
@@ -94,17 +96,26 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        // dd($data);
         $request->validate($this->validation);
-
+        
         $newProduct = new Product();
-
         $slug = $this->createSlug($data);
         $data['slug'] = $slug;
-        $data['thumb'] = Storage::disk('public')->put ('thumbnails', $data['thumb']);
-
+        
+        if (array_key_exists('thumb', $data)) {
+            $data['thumb'] = Storage::disk('public')->put('thumbnails', $data['thumb']);
+        }        
+        
+        // dd($data);
         $newProduct->fill($data);
         $newProduct->save();
+        
+        if (array_key_exists('prod_imgs', $data)) {
+            foreach ($data['prod_imgs'] as $prodImg) {
+                $path = Storage::disk('public')->put('product_imgs/' . $newProduct->id, $prodImg);                
+                ProdImg::create(['product_id' => $newProduct->id, 'path' => $path]);
+            }
+        }
 
         if (array_key_exists('categories', $data)) {
             $newProduct->categories()->attach($data['categories']);

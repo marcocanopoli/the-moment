@@ -21,7 +21,8 @@ class Product extends Model
     protected $with = [
         'categories',
         'anime',
-        'season'
+        'season',
+        'prodImgs'
     ];
 
     public function categories() {
@@ -34,5 +35,9 @@ class Product extends Model
 
     public function season() {
         return $this->belongsTo('App\Season');
+    }
+
+    public function prodImgs() {
+        return $this->hasMany('App\ProdImg');
     }
 }

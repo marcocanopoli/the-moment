@@ -16,7 +16,7 @@ class ProductSeeder extends Seeder
 
         $products = [
             [
-                // 'thumb' => 'https://w7.pngwing.com/pngs/29/367/png-transparent-white-crew-neck-t-shirt-t-shirt-leia-organa-hoodie-clothing-t-shirts-tshirt-white-bracelet.png',
+                'thumb' => 'thumbnails/cEDaiPBZSpII2CC8LRA9qanwajvBYX7CMgf2FLZI.png',
                 'name' => 'Classic T-shirt',
                 'anime' => 'Tokyo Ghoul',
                 'anime_id' => 3,
@@ -28,7 +28,7 @@ class ProductSeeder extends Seeder
                 'price' => 19.99
             ],
             [
-                // 'thumb' => 'https://e7.pngegg.com/pngimages/282/778/png-clipart-black-crew-neck-shirt-t-shirt-sleeve-top-clothing-dress-shirt-tshirt-active-shirt.png',
+                'thumb' => 'thumbnails/CS99UfV5GmBAYjrsAX9Y2VSj1NzQfbJY3NW4ZgdU.png',
                 'name' => 'Classic T-shirt',
                 'anime' => 'Tokyo Ghoul',
                 'anime_id' => 3,
@@ -40,7 +40,7 @@ class ProductSeeder extends Seeder
                 'price' => 19.99
             ],
             [
-                // 'thumb' => 'https://mpng.subpng.com/20180330/ooq/kisspng-t-shirt-navy-blue-polo-shirt-sweater-tshirt-5abe6ffdbdbe81.1204996515224299497772.jpg',
+                'thumb' => 'thumbnails/dhNRBR1d0jCBH8iLABwh7B3hdPojBLzW4dEQKXJl.png',
                 'name' => 'Classic T-shirt',
                 'anime' => 'Tokyo Ghoul',
                 'anime_id' => 3,
@@ -52,7 +52,7 @@ class ProductSeeder extends Seeder
                 'price' => 19.99
             ],
             [
-                // 'thumb' => 'https://www.pikpng.com/pngl/m/85-856781_shirt-clothing-dress-cloth-tank-top-comments-tank.png',
+                'thumb' => 'thumbnails/Pne3TuDGrqgvwc0svEoH7g2RsilPuHvXTpDZsO2v.png',
                 'name' => 'Classic tanktop',
                 'anime' => 'Erased',
                 'anime_id' => 4,
@@ -64,7 +64,7 @@ class ProductSeeder extends Seeder
                 'price' => 12.99
             ],
             [
-                // 'thumb' => 'https://w7.pngwing.com/pngs/782/307/png-transparent-gilets-undershirt-sleeveless-shirt-neck-white-tank-top-white-black-vest.png',
+                'thumb' => 'thumbnails/mFjCaEgpMqO94J1FVCYiaX9yq9PAE3opIuyFFZtm.png',
                 'name' => 'Classic vest',
                 'anime' => 'Inuyasha',
                 'anime_id' => 2,

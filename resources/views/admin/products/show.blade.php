@@ -12,6 +12,13 @@
                     <strong>'{{ session('updated') }}'</strong> was succesfully updated!
                 </div>    
             @endif
+            
+            <div>
+                @foreach ($product->prodImgs as $img)
+                    <img src="{{ asset('storage/' . $img->path)}}" alt="" class="prod-show-img">
+                @endforeach
+
+            </div>
 
             <div class="col-md-4">
                 <img src="{{ asset('storage/' . $product->thumb) }}" class="prod-show-thumb d-block mb-3" alt="Product image">

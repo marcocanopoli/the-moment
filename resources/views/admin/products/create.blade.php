@@ -9,7 +9,7 @@
                 <label for="name" class="form-label">Product name</label>
                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Classic T-shirt" value="{{ old('name') }}">
                 @error('name')
-                <small class="text-danger">{{ $message }}</small>
+                    <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
             {{-- /Name --}}            
@@ -19,10 +19,20 @@
                 <label for="thumb" class="form-label">Thumbnail (5MB Max)</label>
                 <input class="form-control my-file-input @error('thumb') is-invalid @enderror" type="file" id="thumb" name="thumb">
                 @error('thumb')
-                <small class="text-danger">{{ $message }}</small>
+                    <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
             {{-- /Thumbnail --}}
+
+            {{-- Product Images --}}
+            <div class="mb-3">
+                <label for="prod_imgs" class="form-label">Product Images (5MB Max Each)</label>
+                <input class="form-control my-file-input @error('prod_imgs') is-invalid @enderror" type="file" id="prod_imgs" name="prod_imgs[]" multiple>
+                @error('prod_imgs')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+            {{-- /Product Images  --}}
 
             {{-- Anime --}}
             <div class="mb-3">
@@ -38,7 +48,7 @@
                     <a href="" class="btn btn-primary ms-4">ADD ANIME</a>
                 </div>
                 @error('anime_id')
-                <small class="text-danger">{{ $message }}</small>
+                    <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>            
             {{-- /Anime --}}
@@ -54,7 +64,7 @@
                         @endforeach
                     </select>
                     @error('season_id')
-                    <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                     @enderror
                     
                     <a href="" class="btn btn-primary ms-4">ADD SEASON</a>
@@ -87,7 +97,7 @@
                 <label for="color" class="form-label">Color</label>
                 <input type="text" class="form-control @error('color') is-invalid @enderror" id="color" name="color" placeholder="Black" value="{{ old('color') }}">
                 @error('color')
-                <small class="text-danger">{{ $message }}</small>
+                    <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
             {{-- /Color --}}
@@ -102,7 +112,7 @@
                     @endforeach
                 </select>
                 @error('gender')
-                <small class="text-danger">{{ $message }}</small>
+                    <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
             {{-- /Gender --}}
@@ -112,7 +122,7 @@
                 <label for="price" class="form-label">Price (&euro;)</label>
                 <input type="number" min="0.10" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" name="price" placeholder="1.00" value="{{ old('price') }}">
                 @error('price')
-                <small class="text-danger">{{ $message }}</small>
+                    <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
             {{-- /Price --}}
@@ -122,13 +132,12 @@
                 <label for="desc" class="form-label">Description</label>
                 <textarea type="text" rows="5" class="form-control @error('desc') is-invalid @enderror" id="desc" name="desc">{{ old('desc') }}</textarea>
                 @error('desc')
-                <small class="text-danger">{{ $message }}</small>
+                    <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
             {{-- /Description --}}
             
             <button type="submit" class="btn btn-success">ADD PRODUCT</button>
-            {{-- <a class="btn btn-primary ml-2" href="{{ route('admin.products.index') }}">ALL PRODUCTS</a> --}}
 
         </form>        
     </div>
