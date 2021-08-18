@@ -28,9 +28,12 @@
             <div class="mb-3">
                 <label for="prod_imgs" class="form-label">Product Images (5MB Max Each)</label>
                 <input class="form-control my-file-input @error('prod_imgs') is-invalid @enderror" type="file" id="prod_imgs" name="prod_imgs[]" multiple>
-                @error('prod_imgs')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
+                @foreach ($errors->get('prod_imgs.*') as $index => $error)
+                    <h5 class="mt-2">File {{ intval(explode('.', $index)[1]) + 1 }}</h5> 
+                    @foreach($error as $message)
+                        <small class="text-danger">{{ $message }}</small><br>
+                    @endforeach
+                @endforeach
             </div>
             {{-- /Product Images  --}}
 
@@ -45,7 +48,10 @@
                         @endforeach
                     </select>
                     
-                    <a href="" class="btn btn-primary ms-4">ADD ANIME</a>
+                    <a href="{{ route('admin.anime.create') }}" 
+                        class="btn btn-primary ms-4"
+                        onclick="return confirm('You will be redirected to creation page, changes will not be saved. Are you sure?')"
+                        >ADD ANIME</a>
                 </div>
                 @error('anime_id')
                     <small class="text-danger">{{ $message }}</small>
@@ -67,7 +73,10 @@
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
                     
-                    <a href="" class="btn btn-primary ms-4">ADD SEASON</a>
+                    <a href="{{ route('admin.seasons.create') }}" 
+                    class="btn btn-primary ms-4"                    
+                    onclick="return confirm('You will be redirected to creation page, changes will not be saved. Are you sure?')"
+                    >ADD SEASON</a>
                 </div>
             </div>
             {{-- /Season --}}
@@ -87,7 +96,10 @@
                         </div>                    
                         @endforeach
                     </div>
-                    <a href="" class="btn btn-primary">ADD CATEGORY</a>
+                    <a href="{{ route('admin.categories.create') }}" 
+                        class="btn btn-primary"                        
+                        onclick="return confirm('You will be redirected to creation page, changes will not be saved. Are you sure?')"
+                        >ADD CATEGORY</a>
                 </div>               
             </div>
             {{-- /Categories --}}

@@ -12192,16 +12192,33 @@ fieldset:disabled .btn {
 }
 
 .prod-show-thumb {
-  width: 100%;
-  vertical-align: unset;
+  max-width: 100%;
+  max-height: 500px;
 }
 
 .prod-show-img {
-  height: 150px;
+  width: 150px;
+}
+
+.prod-show-left,
+.prod-show-right {
+  width: 50%;
 }
 
 .prod-edit-thumb {
-  max-width: 50%;
+  max-width: 100%;
   max-height: 450px;
+}
+
+.prod-edit-img {
+  max-height: 150px;
+}
+
+.prod-edit-left {
+  width: 40%;
+}
+
+.prod-edit-right {
+  width: 60%;
 }
 

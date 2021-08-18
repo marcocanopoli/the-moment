@@ -2,6 +2,16 @@
 @section('content')
     <div class="container">
         <h1 class="my-4">Editing: <span class="text-info">{{ $fullName }}</span></h1>
+        {{-- @if ($errors->any())
+            @dd($errors);
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif --}}
 
         <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -17,19 +27,71 @@
             </div>
             {{-- /Name --}}            
 
-            {{-- Thumbnail --}}
-            <div class="mb-3">
-                @if ($product->thumb)
+            {{-- Images --}}
+            <div class="mb-3 d-flex">
+
+                {{-- Thumbnail --}}
+                <div class="me-3 prod-edit-left d-flex flex-column">
                     <label class="form-label">Current thumbnail</label>
-                    <img class="prod-edit-thumb d-block mb-3" src="{{ asset('storage/' . $product->thumb) }}" alt="">
-                @endif
-                <label for="thumb" class="form-label">Thumbnail (5MB Max)</label>
-                <input class="form-control my-file-input @error('thumb') is-invalid @enderror" type="file" id="thumb" name="thumb">
-                @error('thumb')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
+                    <div class="flex-grow-1">
+                        @if ($product->thumb)
+                            <img class="prod-edit-thumb d-block mb-3" src="{{ asset('storage/' . $product->thumb) }}" alt="">
+                        @endif
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div>
+                            <label for="thumb" class="form-label">Thumbnail (5MB Max)</label>
+                            <input class="form-control my-file-input @error('thumb') is-invalid @enderror" type="file" id="thumb" name="thumb">
+                            @error('thumb')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="align-self-end ms-3">
+                            <div class="form-check form-check-inline"> 
+                                <input class="form-check-input" type="checkbox" id="delete-thumb" name ="delete-thumb">
+                                <label class="form-check-label" for="delete-thumb">Delete thumbnail</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {{-- /Thumbnail --}}
+                
+                {{-- Product Images --}}
+                <div class="prod-edit-right d-flex flex-column">
+
+                    <label class="form-label">Current product images</label>
+                    <div class="d-flex flex-wrap flex-grow-1">
+                        @foreach ($product->prodImgs as $img)
+                        <div>
+                            <img src="{{ asset('storage/' . $img->path)}}" alt="Product-img-{{ $img->id }}" class="prod-edit-img mb-2 me-3 d-block">
+                            <div class="form-check form-check-inline d-flex justify-content-center"> 
+                                <input class="form-check-input me-2" type="checkbox" id="delete-img-{{ $img->id }}" name ="delete-imgs[]" value="{{ $img->id }}">
+                                <label class="form-check-label" for="delete-img-{{ $img->id }}">Delete</label>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+
+                    <div>
+                        <label for="prod_imgs" class="form-label">Product Images (5MB Max Each)</label>
+                        <input class="form-control my-file-input @error('prod_imgs.*') is-invalid @enderror" type="file" id="prod_imgs" name="prod_imgs[]" multiple>
+                        @foreach ($errors->get('prod_imgs.*') as $index => $error)
+                            <h5 class="mt-2">File {{ intval(explode('.', $index)[1]) + 1 }}</h5> 
+                            @foreach($error as $message)
+                                <small class="text-danger">{{ $message }}</small><br>
+                            @endforeach
+                        @endforeach
+                    </div>
+
+                </div>
+                {{-- /Product Images --}}
+
             </div>
-            {{-- /Thumbnail --}}
+            {{-- /Images --}}
 
             {{-- Anime --}}
             <div class="mb-3">
@@ -42,7 +104,10 @@
                         @endforeach
                     </select>
                     
-                    <a href="" class="btn btn-primary ms-4">ADD ANIME</a>
+                    <a href="{{ route('admin.anime.create') }}" 
+                        class="btn btn-primary ms-4"
+                        onclick="return confirm('You will be redirected to creation page, changes will not be saved. Are you sure?')"
+                        >ADD ANIME</a>
                 </div>
                 @error('anime_id')
                     <small class="text-danger">{{ $message }}</small>
@@ -64,7 +129,10 @@
                          <small class="text-danger">{{ $message }}</small>
                     @enderror
                     
-                    <a href="" class="btn btn-primary ms-4">ADD SEASON</a>
+                    <a href="{{ route('admin.seasons.create') }}" 
+                    class="btn btn-primary ms-4"                    
+                    onclick="return confirm('You will be redirected to creation page, changes will not be saved. Are you sure?')"
+                    >ADD SEASON</a>
                 </div>
             </div>
             {{-- /Season --}}
@@ -90,7 +158,10 @@
                         </div>                    
                         @endforeach
                     </div>
-                    <a href="" class="btn btn-primary">ADD CATEGORY</a>
+                    <a href="{{ route('admin.categories.create') }}" 
+                        class="btn btn-primary"                        
+                        onclick="return confirm('You will be redirected to creation page, changes will not be saved. Are you sure?')"
+                        >ADD CATEGORY</a>
                 </div>               
             </div>
             {{-- /Categories --}}

@@ -118,6 +118,7 @@ return [
     'url' => 'The :attribute format is invalid.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -133,6 +134,10 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'prod_imgs.*' => [
+            'mimes' => 'The product image must be a file of type: :values.',
+            'max' =>  'The product image may not be greater than :max kilobytes.',
+        ]
     ],
 
     /*

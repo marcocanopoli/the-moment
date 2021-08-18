@@ -177,6 +177,37 @@ class ProductController extends Controller
             $data['thumb'] = Storage::disk('public')->put ('thumbnails', $data['thumb']);
         }
 
+        //replace & delete product imgs
+        if (array_key_exists('prod_imgs', $data)) {
+            foreach ($data['prod_imgs'] as $prodImg) {
+                $path = Storage::disk('public')->put('product_imgs/' . $product->id, $prodImg);                
+                ProdImg::create(['product_id' => $product->id, 'path' => $path]);
+            }
+        }
+
+        //delete thumb checkbox
+        if (array_key_exists('delete-thumb', $data)) {
+            if($data['delete-thumb'] == 'on') {
+                $data['thumb'] = null;
+                Storage::delete($product->thumb);
+            }
+        }
+        
+        //delete product imgs checkboxes
+        if (array_key_exists('delete-imgs', $data)) {
+            foreach ($data['delete-imgs'] as $imgCheck) {
+                $img = ProdImg::find($imgCheck);
+                Storage::delete($img->path);
+                $img->delete();
+            }
+
+            //delete empty folder
+            $imgsCount = ProdImg::where('product_id', $product->id)->count(); 
+            if($imgsCount == 0) {
+                Storage::deleteDirectory('product_imgs/' . $product->id);
+            }
+        }
+
         $product->update($data);
 
         //replace categories
@@ -203,8 +234,21 @@ class ProductController extends Controller
             Storage::delete($product->thumb);
         }
 
+        if ($product->prodImgs) {
+            foreach ($product->prodImgs as $prodImg) {
+                Storage::delete($prodImg->path);
+            }
+        }            
+
         $fullName = $this->fullName($product);
         $product->delete();
+
+        //delete empty folder
+        $imgsCount = ProdImg::where('product_id', $product->id)->count();
+        if($imgsCount == 0) {
+            Storage::deleteDirectory('product_imgs/' . $product->id);
+        }
+        
 
         return redirect()
             ->route('admin.products.index')
