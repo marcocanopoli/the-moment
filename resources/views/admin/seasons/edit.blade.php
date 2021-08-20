@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
-        <h1 class="my-4">Editing: <span class="text-info">{{ $season->name }}</span></h1>
+        <h1 class="mb-3">Editing: <span class="text-info">{{ $season->name }}</span></h1>
 
-        <form action="{{ route('admin.seasons.update', $season->id) }}" method="POST" enctype="multipart/form-data">
+        <form class="mt-3" action="{{ route('admin.seasons.update', $season->id) }}" method="POST">
             @csrf
             @method('PATCH')
 

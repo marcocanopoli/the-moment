@@ -15,8 +15,8 @@
             </div>
         @endif
 
-        <a class="btn btn-primary my-4" href="{{ route('admin.anime.create') }}">NEW ANIME</a>
-        <table class="table table-striped">
+        <a class="btn btn-primary" href="{{ route('admin.anime.create') }}">NEW ANIME</a>
+        <table class="table table-striped mt-3">
             <thead>
                 <tr>
                     <th>ID</th>

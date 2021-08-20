@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
-        <h1 class="my-4">Editing: <span class="text-info">{{ $category->name }}</span></h1>
+        <h1 class="mb-3">Editing: <span class="text-info">{{ $category->name }}</span></h1>
 
-        <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+        <form class="mt-3" action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
 
@@ -32,7 +32,7 @@
             <div class="mb-3">
                 <label class="form-label">Current thumbnail</label>
                 @if ($category->thumb)
-                    <img class="d-block mb-3" src="{{ asset('storage/' . $category->thumb) }}" alt="{{ $category->name . '-thumbnail'}}">
+                    <img class="cat-edit-thumb d-block mb-3" src="{{ asset('storage/' . $category->thumb) }}" alt="{{ $category->name . '-thumbnail'}}">
                 @endif
                 <label for="thumb" class="form-label">Thumbnail (5MB Max)</label>
                 <input class="form-control my-file-input @error('thumb') is-invalid @enderror" type="file" id="thumb" name="thumb">

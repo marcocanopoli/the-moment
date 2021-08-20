@@ -1,7 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
-        <form action="{{ route('admin.seasons.store') }}" method="POST" enctype="multipart/form-data">
+        <h1 class="mb-3">New: <span class="text-info">Season</span></h1>
+
+        <form class="mt-3" action="{{ route('admin.seasons.store') }}" method="POST">
             @csrf
 
             {{-- Name --}}            

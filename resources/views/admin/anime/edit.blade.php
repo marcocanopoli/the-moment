@@ -3,7 +3,7 @@
     <div class="container">
         <h1 class="my-4">Editing: <span class="text-info">{{ $anime->name }}</span></h1>
 
-        <form action="{{ route('admin.anime.update', $anime->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.anime.update', $anime->id) }}" method="POST">
             @csrf
             @method('PATCH')
 

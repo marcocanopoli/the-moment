@@ -80,13 +80,14 @@ class ProductSeeder extends Seeder
         foreach ($products as $product) {
             
             $fullName = $product['anime'] . ' ' . $product['name'] . ' ' . $product['color'];
-            
+            $groupName = $product['anime'] . ' ' . $product['name'];
+
             $newPost = new product();
             $newPost->thumb = $product['thumb'];
             $newPost->name = $product['name'];           
             $newPost->anime_id = $product['anime_id'];            
             $newPost->slug = Str::slug($fullName, '-');
-            // $newPost->prod_group = Str::slug(product['anime'] . $product['name'] . ' ' . 'group', '-');
+            $newPost->prod_group = Str::slug($groupName, '-');
             $newPost->desc = $product['desc'];
             $newPost->color = $product['color'];
             $newPost->season_id = $product['season_id'];

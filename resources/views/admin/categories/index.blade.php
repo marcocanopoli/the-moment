@@ -15,8 +15,8 @@
             </div>
         @endif
 
-        <a class="btn btn-primary my-4" href="{{ route('admin.categories.create') }}">NEW CATEGORY</a>
-        <table class="table table-striped">
+        <a class="btn btn-primary" href="{{ route('admin.categories.create') }}">NEW CATEGORY</a>
+        <table class="table table-striped mt-3">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -33,7 +33,7 @@
                         <td>{{ $category->id }}</td>
                         <td>
                             {{-- <img src="{{ asset('storage/' . $category->thumb) }}" alt="{{ $category->name }}-thumbnail"> --}}
-                            <img style="height: 50px; width: 50px; object-fit: cover;" src="{{ $category->thumb }}" alt="{{ $category->name }}-thumbnail">
+                            <img class="cat-index-thumb" src="{{ asset('storage/' . $category->thumb) }}" alt="{{ $category->name }}-thumbnail">
                         </td>
                         <td>{{ $category->name }}</td>
                         <td>{{ $category->slug }}</td>

@@ -28,6 +28,7 @@ Route::middleware('auth')
     Route::resource('anime', 'AnimeController')->except('show');
     Route::resource('seasons', 'SeasonController')->except('show');
     Route::resource('categories', 'CategoryController')->except('show');
+    Route::resource('{product}/variants', 'VariantController')->except('show');
 });
 
 Route::get('{any?}', 'HomeController@index')->where('any', '.*')->name('home');

@@ -12,7 +12,7 @@ use App\Category;
 class CategoryController extends Controller
 {
 
-    private $validation = [
+    private $rules = [
         'thumb' => 'nullable|mimes:jpeg,jpg,png,bmp,gif,svg,webp|max:5120',
         'name' => 'unique:categories,name',
         'desc' => 'nullable'
@@ -48,7 +48,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $request->validate($this->validation);        
+        $request->validate($this->rules);        
         $newCategory = new Category();
         $data['slug'] = Str::slug('cat ' . $data['name'], '-');
 
@@ -100,7 +100,7 @@ class CategoryController extends Controller
             if ($category->thumb){
                 Storage::delete($category->thumb);
             }
-            $data['thumb'] = Storage::disk('public')->put ('products/thumbnails', $data['thumb']);
+            $data['thumb'] = Storage::disk('public')->put ('categories/thumbnails', $data['thumb']);
         }
 
         $category->update($data);

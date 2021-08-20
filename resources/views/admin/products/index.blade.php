@@ -7,7 +7,7 @@
             </div>            
         @endif
 
-        <a class="btn btn-primary my-4" href="{{ route('admin.products.create') }}">NEW PRODUCT</a>
+        <a class="btn btn-primary mb-3" href="{{ route('admin.products.create') }}">NEW PRODUCT</a>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -21,6 +21,7 @@
                     <th>Season</th>
                     <th>Gender</th>
                     <th>Price</th>
+                    <th>Variants</th>
                     <th colspan="3" >Actions</th>
                 </tr>
             </thead>
@@ -28,9 +29,9 @@
                 @foreach ($products as $product)
                     <tr>
                         <td><img src="{{ asset('storage/' . $product->thumb) }}" class="prod-index-thumb" alt="Thumbnail"></td>
-                        <td>
+                        <td class="text-center">
                             @forelse ($product->categories as $category)
-                                <img src="{{ $category->thumb }}" alt="{{ $category->name }} thumb" class="prod-index-cat">
+                                <img src="{{ asset('storage/' . $category->thumb) }}" alt="{{ $category->name }} thumb" class="prod-index-cat">
                             @empty                    
                                 <span class="badge rounded-pill bg-warning">No category</span>
                             @endforelse
@@ -43,6 +44,9 @@
                         <td>{{ $product->season->name }}</td>
                         <td>{{ $product->gender }}</td>
                         <td>{{ $product->price }}</td>
+                        <td>
+                            <a class="btn btn-warning" href="{{ route('admin.variants.index', $product->id) }}">VARIANTS</a>
+                        </td>
                         <td>
                             <a class="btn btn-success" href="{{ route('admin.products.show', $product->id) }}">SHOW</a>
                         </td>

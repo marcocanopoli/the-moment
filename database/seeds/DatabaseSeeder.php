@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SeasonSeeder::class);
         $this->call(AnimeSeeder::class);
         $this->call(ProductSeeder::class);
+        $this->call(VariantSeeder::class);
     }
 }

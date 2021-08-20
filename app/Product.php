@@ -11,6 +11,7 @@ class Product extends Model
         'anime_id',
         'thumb',
         'name',
+        'prod_group',
         'slug',
         'desc',
         'color',
@@ -22,8 +23,25 @@ class Product extends Model
         'categories',
         'anime',
         'season',
-        'prodImgs'
+        'prodImgs',
+        'variants'
     ];
+
+    public static function genders() {
+        return [
+            'Man',
+            'Woman',
+            'Unisex',
+            'Boy',
+            'Girl',
+            'Baby Boy',
+            'Baby Girl'
+        ];
+    }
+
+    public static function fullName(Product $product) {
+        return $product->anime->name . ' - ' . $product->name . ' - ' . $product->color;
+    }
 
     public function categories() {
         return $this->belongsToMany('App\Category');
@@ -39,5 +57,9 @@ class Product extends Model
 
     public function prodImgs() {
         return $this->hasMany('App\ProdImg');
+    }
+
+    public function variants() {
+        return $this->hasMany('App\Variant');
     }
 }

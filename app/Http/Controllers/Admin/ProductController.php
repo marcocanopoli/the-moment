@@ -14,50 +14,50 @@ use App\ProdImg;
 
 class ProductController extends Controller
 {   
-    private $genders = [
-        'Man',
-        'Woman',
-        'Unisex',
-        'Boy',
-        'Girl',
-        'Baby Boy',
-        'Baby Girl'
-    ];
 
-    private $validation = [
+    private $rules = [
         'thumb' => 'nullable|mimes:jpeg,jpg,png,bmp,gif,svg,webp|max:5120',
-        'prod_imgs.*' => 'mimes:jpeg,jpg,png,bmp,gif,svg,webp|max:5120',
+        'prodImgs.*' => 'mimes:jpeg,jpg,png,bmp,gif,svg,webp|max:5120',
         'name' => 'required|max:100',
-        'anime' => 'exists:anime,id',
+        'anime_id' => 'required|exists:anime,id',
         'desc' => 'nullable',
         'color' => 'required|max:50',
-        'season' => 'exists:seasons,id',
-        'price' => 'required|numeric',
+        'season_id' => 'exists:seasons,id',
+        'price' => 'required|numeric|min:0.5',
         'categories' => 'exists:categories,id',
         'gender' => 'required'
     ];
 
-    private function createSlug($data) {
+    private function createSlug($data, $oldSlug = '') {
         $anime = Anime::find($data['anime_id']);
         $string = $anime->name . ' ' . $data['name'] . ' ' . $data['color'];
         $slug = Str::slug($string, '-');
-
-        $existingProduct = Product::where('slug', $slug)->count();
-
-        $slugString = $slug;
+        
+        $newSlug = $slug;
         $counter = 1;
+        $productCount = Product::where('slug', $slug)->count();
 
-        while($existingProduct >= 1) {
-            $slug = $slugString . "-" . $counter;
-            $existingProduct = Product::where('slug', $slug)->count();
+        while($productCount == 1) {
+
+            if ($slug == $oldSlug) {
+                return $slug;
+            }
+
+            $slug = $newSlug . "-" . $counter;            
+            $productCount = Product::where('slug', $slug)->count();
             $counter++;
         }
 
         return $slug;
     }
 
-    private function fullName(Product $product) {
-        return $product->anime->name . ' - ' . $product->name . ' - ' . $product->color;
+    private function getColors() {
+        $distinctColors = Product::select('color')->distinct()->get();
+        $colors = [];
+        foreach ($distinctColors as $item) {
+            $colors[] = $item->color;
+        }
+        return $colors;
     }
 
     /**
@@ -81,10 +81,12 @@ class ProductController extends Controller
     {
         $anime = Anime::all();
         $categories = Category::all();
-        $genders = $this->genders;
-        $seasons = Season::all();        
+        $genders = Product::genders();
+        $seasons = Season::all();
+        $colors = $this->getColors();        
 
-        return view('admin.products.create', compact('anime', 'categories', 'genders', 'seasons'));
+        return view('admin.products.create', 
+            compact('anime', 'categories', 'genders', 'seasons', 'colors'));
     }
 
     /**
@@ -96,11 +98,12 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $request->validate($this->validation);
+        $request->validate($this->rules);
         
         $newProduct = new Product();
-        $slug = $this->createSlug($data);
-        $data['slug'] = $slug;
+        $data['slug'] = $this->createSlug($data);
+        $anime = Anime::find($data['anime_id'])->name;
+        $data['prod_group'] = Str::slug($anime . ' ' . $data['name'], '-');
         
         if (array_key_exists('thumb', $data)) {
             $data['thumb'] = Storage::disk('public')->put('products/thumbnails', $data['thumb']);
@@ -110,9 +113,9 @@ class ProductController extends Controller
         $newProduct->fill($data);
         $newProduct->save();
         
-        if (array_key_exists('prod_imgs', $data)) {
-            foreach ($data['prod_imgs'] as $prodImg) {
-                $path = Storage::disk('public')->put('product_imgs/' . $newProduct->id, $prodImg);                
+        if (array_key_exists('prodImgs', $data)) {
+            foreach ($data['prodImgs'] as $prodImg) {
+                $path = Storage::disk('public')->put('products/imgs/' . $newProduct->id, $prodImg);                
                 ProdImg::create(['product_id' => $newProduct->id, 'path' => $path]);
             }
         }
@@ -123,7 +126,7 @@ class ProductController extends Controller
 
         return redirect()
             ->route('admin.products.show', $newProduct->id)
-            ->with('created', $this->fullName($newProduct));
+            ->with('created', Product::fullName($newProduct));
     }
 
     /**
@@ -148,11 +151,14 @@ class ProductController extends Controller
     {
         $anime = Anime::all();
         $categories = Category::all();
-        $genders = $this->genders;
+        $genders = Product::genders();
         $seasons = Season::all();
-        $fullName = $this->fullName($product);
+        $fullName = Product::fullName($product);
+        $colors = $this->getColors();
+         
 
-        return view('admin.products.edit', compact('product','anime', 'categories', 'genders', 'seasons', 'fullName'));
+        return view('admin.products.edit', 
+            compact('product','anime', 'categories', 'genders', 'seasons', 'fullName', 'colors'));
     }
 
     /**
@@ -165,9 +171,10 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->all();
-        $request->validate($this->validation);
-        $slug = $this->createSlug($data);
-        $data['slug'] = $slug;
+        $request->validate($this->rules);
+        $data['slug'] = $this->createSlug($data, $product->slug);
+        $anime = Anime::find($data['anime_id'])->name;
+        $data['prod_group'] = Str::slug($anime . ' ' . $data['name'], '-');;
 
         //replace & delete thumbnail
         if (array_key_exists('thumb', $data)) {            
@@ -178,9 +185,9 @@ class ProductController extends Controller
         }
 
         //replace & delete product imgs
-        if (array_key_exists('prod_imgs', $data)) {
-            foreach ($data['prod_imgs'] as $prodImg) {
-                $path = Storage::disk('public')->put('product_imgs/' . $product->id, $prodImg);                
+        if (array_key_exists('prodImgs', $data)) {
+            foreach ($data['prodImgs'] as $prodImg) {
+                $path = Storage::disk('public')->put('products/imgs/' . $product->id, $prodImg);                
                 ProdImg::create(['product_id' => $product->id, 'path' => $path]);
             }
         }
@@ -204,7 +211,7 @@ class ProductController extends Controller
             //delete empty folder
             $imgsCount = ProdImg::where('product_id', $product->id)->count(); 
             if($imgsCount == 0) {
-                Storage::deleteDirectory('product_imgs/' . $product->id);
+                Storage::deleteDirectory('products/imgs/' . $product->id);
             }
         }
 
@@ -219,7 +226,7 @@ class ProductController extends Controller
 
         return redirect()
             ->route('admin.products.show', $product->id)
-            ->with('updated', $this->fullName($product));
+            ->with('updated', Product::fullName($product));
     }
 
     /**
@@ -240,13 +247,13 @@ class ProductController extends Controller
             }
         }            
 
-        $fullName = $this->fullName($product);
+        $fullName = Product::fullName($product);
         $product->delete();
 
         //delete empty folder
         $imgsCount = ProdImg::where('product_id', $product->id)->count();
         if($imgsCount == 0) {
-            Storage::deleteDirectory('product_imgs/' . $product->id);
+            Storage::deleteDirectory('products/imgs/' . $product->id);
         }
         
 
