@@ -99,6 +99,14 @@ export default {
                         this.$store.dispatch('setUser');
                         this.closeLogin();
                         this.$router.push({ name: "shop" })
+                        .catch(error => {
+                            if (
+                                error.name !== 'NavigationDuplicated' &&
+                                !error.message.includes('Avoided redundant navigation to current location')
+                            ){
+                                console.log(error)
+                            }
+                        })
                     })
                     .catch(error => console.log(error));
             });
@@ -108,7 +116,15 @@ export default {
                 .then(response => {
                     this.$store.commit('SET_USER', null);
                     window.localStorage.removeItem('user');
-                    this.$router.push({ name: "shop" }, () => {})
+                    this.$router.push({ name: "shop" })
+                    .catch(error => {
+                            if (
+                                error.name !== 'NavigationDuplicated' &&
+                                !error.message.includes('Avoided redundant navigation to current location')
+                            ){
+                                console.log(error)
+                            }
+                        })
                 })
                 .catch(error => console.log(error));            
         },
