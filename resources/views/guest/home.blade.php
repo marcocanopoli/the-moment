@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ config('app.name', 'The Moment') }}</title>
 
         <!-- Fonts -->
@@ -14,11 +14,11 @@
     </head>
     <body>
 
-        @if (session('logout'))
+        {{-- @if (session('logout'))
             <div role="alert">
                 {{ session('logout') }}
             </div>
-        @endif 
+        @endif --}}
 
         {{-- @if (Route::has('login'))
             <div>
@@ -33,10 +33,21 @@
                 @endauth
             </div>
         @endif --}}
-        
-        <div id="root"></div>   
+
+        <div id="root"></div>
 
         <!-- Scripts -->
+        @if(Auth::check())
+            <script>
+                top.loggedIn = true;
+            </script>
+        @else 
+            <script>
+                top.loggedIn = false;
+            </script>
+        @endif
+        
         <script src="{{ asset('js/front.js') }}"></script>
+        
     </body>
 </html>

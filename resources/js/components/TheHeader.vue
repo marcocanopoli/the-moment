@@ -1,120 +1,160 @@
 <template>
-    <header class="header">
-        <nav class="navbar">
-            <img class="logo" src="https://seeklogo.com/images/F/Fullmetall_Alchemist_anime-logo-59840B9E1F-seeklogo.com.png" alt="Big logo">
-            <div class="nav-center">
-                <!-- menu -->
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/">Shop<i class="fas fa-angle-down"></i></a></li>
-                    <li><a href="/">About</a></li>
-                    <li><a href="/admin">Admin</a></li>                            
-                </ul>
-                <!-- /menu -->
-            </div>
-
-            <div class="nav-right">                
-                <!-- search button -->
-                <a href="/"><i class="fas fa-search"></i></a>
-                <!-- /search button -->
-
-                <!-- account -->
-                <a href="/"><i class="fas fa-user-circle"></i></a>
-                <!-- /account -->
-
-                <!-- cart -->
-                <a href="/"><i class="fas fa-shopping-cart"></i></a>
-                <!-- /cart -->
-
-                <!-- language -->
-                <a href="/">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg" alt="flag italy">
+    <header class="header bg-gray-900">
+        <nav class="flex flex-col max-w-screen-2xl mx-auto h-full text-gray-100">
+            <div class="flex h-1/2 items-center pt-4 space-x-8">
+                <a class="h-full flex items-center font-bold text-xl" href="/" id="logo">
+                    <img class="h-full mr-4" src="../../images/drop-red.png" alt="Logo">
+                    The<span class="text-red-500 hover:text-gray-100">Moment</span>
                 </a>
-                <!-- /language -->
+                <form class="searchbar flex flex-grow items-center h-full px-5 text-gray-900 bg-gray-100 rounded-full overflow-hidden ">
+                    <input type="text" class="h-full w-full appearance-none bg-transparent focus-visible: outline-none">
+                    <button><i class="fas fa-search"></i></button>
+                </form>
+                <ul class="flex h-full items-center">
+                    <li v-if="$store.state.user == null">
+                        <button 
+                            @click="openLogin" 
+                            class="">Login
+                        </button>
+                        <!-- <router-link :to="{ name: 'login' }">Login</router-link> -->
+                    </li>
+                    <li v-else>
+                        <a href="/">
+                            <i class="fas fa-user-circle mr-2"></i>
+                            {{ $store.state.user.name }}
+                        </a>                        
+                    </li>
+                    <li>
+                        <a href="/"><i class="fas fa-shopping-cart"></i></a>                        
+                    </li>
+                </ul>
+
             </div>
+            <ul class="flex text-white space-x-8 h-1/2 items-center justify-center">
+                <li><router-link :to="{ name: 'home' }">Home</router-link></li>                    
+                <li><router-link :to="{ name: 'shop' }">Shop</router-link></li>                   
+                <li v-if="$store.state.user">
+                    <a href="" @click.prevent="handleLogout">Logout</a>                                              
+                </li>   
+            </ul>
         </nav>
+        <v-modal 
+            v-show="isLoginVisible"
+            @close="closeLogin">
+
+            <template v-slot:body>
+                <form 
+                    class="flex flex-col" 
+                    @submit.prevent="handleLogin" action="#">
+                        <p class="mb-5 text-3xl uppercase text-gray-600">Login</p>
+                        <input 
+                            id="email" 
+                            type="email" 
+                            v-model="loginForm.email" 
+                            class="mb-5 p-3 w-80 rounded-lg border-2 outline-none"
+                            placeholder="Email"
+                            required>
+                        <input 
+                            id="password" 
+                            type="password" 
+                            v-model="loginForm.password" 
+                            class="mb-5 p-3 w-80 rounded-lg border-2 outline-none"
+                            placeholder="Password"
+                            required > 
+                        <div class="mb-5 w-80 ">
+                            <input type="checkbox" id="remember">
+                            <label class="text-gray-600 pl-1" for="remember">Remember Me</label>
+                        </div>
+
+                        <button class="bg-red-600 hover:bg-red-900 text-white font-bold p-2 rounded-lg w-80" id="login" type="submit"><span>Login</span></button>
+                </form>
+            </template>            
+        </v-modal>
     </header>
 </template>
 
 <script>
+import VModal from './VModal.vue';
+
 export default {
-    name: 'TheHeader'
+    name: 'TheHeader',
+    components: {
+        VModal
+    },
+    data() {
+        return {
+            isLoginVisible: false,
+            loginForm: {
+                email: '',
+                password: ''
+            }
+        }
+    },
+    methods: {
+        handleLogin() {
+            axios.get('/sanctum/csrf-cookie')
+            .then(response => {
+                axios.post('/login', this.loginForm)
+                    .then(response => {
+                        this.$store.dispatch('setUser');
+                        this.closeLogin();
+                        this.$router.push({ name: "shop" })
+                    })
+                    .catch(error => console.log(error));
+            });
+        },
+        handleLogout() {
+            axios.post('/logout')
+                .then(response => {
+                    this.$store.commit('SET_USER', null);
+                    window.localStorage.removeItem('user');
+                    this.$router.push({ name: "shop" }, () => {})
+                })
+                .catch(error => console.log(error));            
+        },
+        closeLogin() {
+            this.isLoginVisible = false;
+        },
+        openLogin() {
+            this.isLoginVisible = true;
+        }
+    }
 }
 </script>
 
 <style lang="scss">
 
     @import '../../sass/front/_variables.scss';
-    @import '../../sass/front/_colors.scss';
 
     .header {
-        width: 60%;
-        margin: 0 auto;
-        padding: 15px;
         height: $headerHeight;
-        text-align: center;
-        background-color: $gray-700;  
-        color: $white;
-        border-radius: 0 0 30px 30px;
-        box-shadow: 0px 8px 8px rgba(0, 0 , 0, 0.3);
 
-        a {
-            text-decoration: none;
-            color: $white;
-            transition: .2s;
-
-            &:hover {
-                color: $red;
-            }
-        }
-
-
-        .navbar {
+        li {
             display: flex;
-            justify-content: space-between;  
-            align-items: center;
-            width: 100%;            
-            font-size: 1.3em;
+            height: 100%;
 
-            .logo {
-                height: 50px;
-            }
-
-            .nav-center {
+            a {
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
-
-                ul {    
-                    display: flex;
-                    justify-content: space-between;
-
-                    li {
-                        display: inline-block;
-                        padding: 0 20px;
-
-                        i {    
-                            margin-left: 5px;
-                        }
-
-                    }
+                padding: 0 16px;
+                transition: .2s;
+    
+                &:hover {
+                    color: theme('colors.red.500');
+                }
+    
+                &.active {
+                    background-color: theme('colors.red.500');
                 }
             }
-
-            .nav-right {
-                display: flex;
-
-                a {
-                    display: flex;
-                    align-items: center;
-                    padding: 0 10px;
-
-                    img {    
-                        height: 20px;
-                    }
-                }
-            }            
         }
+
+        .searchbar {
+            &:focus-within {
+                outline: 2px solid theme('colors.red.500');
+            }
+        }
+
     }
 
 </style>

@@ -1,7 +1,7 @@
 <template>
-    <section class="app">
+    <section class="app bg-gray-100">
         <the-header />
-        <main class="view">
+        <main class="view max-w-screen-2xl mx-auto">
             <router-view></router-view>
         </main>
         <the-footer />
@@ -17,6 +17,16 @@ export default {
     components: {
         TheHeader,
         TheFooter
+    },
+    data() {
+        return {
+
+        }
+    },
+    created() {
+        if(top.loggedIn){
+            this.$store.dispatch('setUser');
+        }
     }
 }
 </script>
@@ -25,10 +35,11 @@ export default {
     @import '../sass/front/_variables.scss';
 
    .app {
-       background-image: url('../../public/img/drops_texture3.png');
+    //    background-image: url('../images/drops_texture3.png');
 
        .view {
            width: 100%;
+           min-height: calc(100vh - (#{$headerHeight} + #{$footerHeight}));
            height: calc(100vh - (#{$headerHeight} + #{$footerHeight}));
        }
    }

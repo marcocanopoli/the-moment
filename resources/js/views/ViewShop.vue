@@ -1,17 +1,20 @@
 <template>
-    <section class="home">
-        <h1>Home</h1>        
+    <section class="shop">
+        <h1>Shop</h1>
     </section>
 </template>
 
 <script>
 export default {
-    name: 'ViewHome'
+    name: 'ViewShop',
+    props: {
+        user: Object
+    }
 }
 </script>
 
 <style lang="scss">    
-    .home {
+    .shop {
         display: flex;
         justify-content: center;
         align-items: center;
