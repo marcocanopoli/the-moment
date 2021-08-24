@@ -5,7 +5,8 @@ Vue.use(VueRouter);
 
 import ViewHome from './views/ViewHome.vue';
 import ViewShop from './views/ViewShop.vue';
-// import ViewLogin from './views/ViewLogin.vue';
+import ViewProduct from './views/ViewProduct.vue';
+// import VLogin from './components/VLogin.vue';
 import ViewNotFound from './views/ViewNotFound.vue';
 
 const router = new VueRouter({
@@ -23,10 +24,15 @@ const router = new VueRouter({
            name: 'shop',
            component: ViewShop
         },        
+        {
+           path: '/products/:id',
+           name: 'product',
+           component: ViewProduct
+        },        
         // {
         //    path: '/user-login',
         //    name: 'login',
-        //    component: ViewLogin
+        //    component: VLogin
         // },     
         {
             path: '*',

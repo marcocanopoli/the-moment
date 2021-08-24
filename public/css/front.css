@@ -38324,17 +38324,92 @@ video {
   content: none;
 }
 
+/**
+ * ----------------------------------------
+ * animation scale
+ * ----------------------------------------
+ */
+
+@-webkit-keyframes scale {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scale {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  50% {
+    opacity: 0;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@-webkit-keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
   filter: none;
-  border: 2px solid #dc2626;
-  -webkit-text-fill-color: #4b5563;
-  -webkit-box-shadow: 0 0 0px 1000px #fef2f2 inset;
+  border: 2px solid #6366f1;
+  -webkit-text-fill-color: #6b7280;
+  -webkit-box-shadow: 0 0 0px 1000px #eef2ff inset;
 }
 
 :checked {
-  background-color: #dc2626;
+  background-color: #6366f1;
 }
 
 @media (min-width: 640px){
@@ -194476,4 +194551,3 @@ input:-webkit-autofill:focus {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
-

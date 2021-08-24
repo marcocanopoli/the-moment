@@ -1,6 +1,6 @@
 <template>
-    <footer class="footer">
-        <h1>Footer</h1>
+    <footer class="footer flex justify-center items-center bg-gray-900 text-gray-100">
+        <span class="text-xl font-semibold">&copy; Nembo 2021</span>
     </footer>
 </template>
 
@@ -11,8 +11,11 @@ export default {
 </script>
 
 <style lang="scss">
+
+    @import '../../sass/front/_variables.scss';
+
     .footer{
-        height: 60px;
-        text-align: center;
+        height: $footerHeight;
     }
+
 </style>

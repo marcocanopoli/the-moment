@@ -1,20 +1,26 @@
 <template>
-    <section class="home">
-        <h1>Home</h1>        
+    <section class="home h-full"
+        v-if="!loading">
     </section>
+    <v-loader v-else></v-loader>        
 </template>
 
 <script>
+import VLoader from '../components/VLoader.vue';
+
 export default {
-    name: 'ViewHome'
+    name: 'ViewHome',
+    components: {
+        VLoader
+    },
+    data() {
+        return {
+            loading: true
+        }
+    }
 }
 </script>
 
-<style lang="scss">    
-    .home {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-    }
+<style lang="scss">
+
 </style>

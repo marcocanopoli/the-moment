@@ -4,17 +4,22 @@
 
 @import '~@fortawesome/fontawesome-free/css/all.min.css';
 @import 'variables';
-// @import 'animations';
+@import 'animations';
+
+// body,
+// html {
+//     height: 100%;
+// }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus {
     filter: none;
-    border: 2px solid theme('colors.red.600');
-    -webkit-text-fill-color: theme('colors.gray.600');
-    -webkit-box-shadow: 0 0 0px 1000px theme('colors.red.50') inset;
+    border: 2px solid theme('colors.indigo.500');
+    -webkit-text-fill-color: theme('colors.gray.500');
+    -webkit-box-shadow: 0 0 0px 1000px theme('colors.indigo.50') inset;
 }
 
 :checked {
-    background-color: theme('colors.red.600');
+    background-color: theme('colors.indigo.500');
 }

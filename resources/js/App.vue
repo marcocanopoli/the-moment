@@ -1,8 +1,9 @@
 <template>
     <section class="app bg-gray-100">
         <the-header />
-        <main class="view max-w-screen-2xl mx-auto">
-            <router-view></router-view>
+        <main class="view relative max-w-screen-2xl mx-auto py-14"> 
+            <!-- h-px -->
+            <router-view ></router-view>
         </main>
         <the-footer />
     </section>
@@ -24,8 +25,8 @@ export default {
         }
     },
     created() {
-        if(top.loggedIn){
-            this.$store.dispatch('setUser');
+        if(top.loggedIn){            
+            this.$store.dispatch('getSetUser');
         }
     }
 }
@@ -38,9 +39,7 @@ export default {
     //    background-image: url('../images/drops_texture3.png');
 
        .view {
-           width: 100%;
            min-height: calc(100vh - (#{$headerHeight} + #{$footerHeight}));
-           height: calc(100vh - (#{$headerHeight} + #{$footerHeight}));
        }
    }
 

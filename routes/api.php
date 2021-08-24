@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// Route::namespace('Api')->group(function() {        
-//     Route::get('user', 'UserController@getLogged');
-// });
+Route::namespace('Api')->group(function() {        
+    Route::get('products', 'ProductController@index');
+    Route::get('products/{slug}', 'ProductController@get');
+    Route::get('products/groups/{prod_group}', 'ProductController@getGroup');
+});
 
 // Route::middleware('auth.api')->get('/user', function (Request $request) {
 //     return $request->user();
@@ -27,4 +29,4 @@ use Illuminate\Support\Facades\Auth;
 // });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();    
-}); //dopo login da frontend
+});
