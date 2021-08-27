@@ -8,8 +8,11 @@ use App\Product;
 
 class ProductController extends Controller
 {
-    public function index() {
-        $products = Product::all();
+    public function index(Request $request) {
+        // $products = Product::all();
+
+        $query = $request->input();            
+        $products = Product::where($query)->get();
         return response()->json($products);
     }
 

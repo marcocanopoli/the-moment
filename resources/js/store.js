@@ -7,13 +7,18 @@ export const store = new Vuex.Store ({
     state: {
         user: null,
         allProducts: [],
-        filteredProducts: [],
-        loading: false
+        // filteredProducts: [],
+        loading: false,
+        animeList: [],
+        categoriesList: [],
+        colorsList: [],
+        seasonsList: [],
+        sizesList: [],
     },
     mutations: {
         SET_USER (state, user) {
             state.user = user;
-            window.localStorage.setItem('user', JSON.stringify(user));
+            // window.localStorage.setItem('userID', JSON.stringify(user.id));
         },
         // GET_STORED_USER (state) {        
         //   const savedUser = window.localStorage.getItem('user');
@@ -31,36 +36,52 @@ export const store = new Vuex.Store ({
         },
         SET_LOADING_FALSE (state) {
             state.loading = false;
+        },
+        // ADD_ELEMENT(state, element, array) {
+        //     state[array].push(element);
+        // },
+        SET_PRODUCT_PROPERTY_LIST(state, [productsArray, listArray, firstLevelProperty, secondLevelProperty]) {
+            state[productsArray].forEach(product => {
+                if(firstLevelProperty === undefined) {
+                    return;
+                }else if (Array.isArray(product[firstLevelProperty])) {
+                    product[firstLevelProperty].forEach(element => {
+                        if(!state[listArray].includes(element[secondLevelProperty])) {
+                            state[listArray].push(element[secondLevelProperty]);
+                        }
+                    });
+                }else if (secondLevelProperty === undefined) {
+                    if (!state[listArray].includes(product[firstLevelProperty])){
+                        state[listArray].push(product[firstLevelProperty]);
+                    }
+                } else if (!state[listArray].includes(product[firstLevelProperty][secondLevelProperty])) {
+                    state[listArray].push(product[firstLevelProperty][secondLevelProperty]);
+                }
+            });
         }
     },
     actions: {
         getSetUser({ commit }) {
-            axios.get('/api/user')
-            .then(
-                res => {
+            return axios.get('/api/user')
+            .then(res => {
                     commit('SET_USER', res.data );                        
                 }
             )
             .catch(error => {
                 if (error.response) {
-                    // Request made and server responded
                     console.log(error.response);                        
                 } else if (error.request) {
-                    // The request was made but no response was received
                     console.log(error.request);
                 } else {
-                    // Something happened in setting up the request that triggered an Error
                     console.log('Error', error.message);
                 }
             });
         },      
         getSetProducts({ commit }) {
-            commit('SET_LOADING_TRUE');
-            axios.get('/api/products')
+            return axios.get('/api/products')
             .then(
                 res => {
-                    commit('SET_PRODUCTS', res.data );                        
-                    commit('SET_LOADING_FALSE');
+                    commit('SET_PRODUCTS', res.data );
                 }
             )
             .catch(error => {
@@ -73,17 +94,33 @@ export const store = new Vuex.Store ({
                 }
             });
         },
+        setPropertiesLists({ commit }) {
+            commit('SET_PRODUCT_PROPERTY_LIST', ['allProducts', 'animeList', 'anime', 'name']);
+            commit('SET_PRODUCT_PROPERTY_LIST', ['allProducts', 'categoriesList', 'categories', 'name']);
+            commit('SET_PRODUCT_PROPERTY_LIST', ['allProducts', 'colorsList', 'color']);
+            commit('SET_PRODUCT_PROPERTY_LIST', ['allProducts', 'seasonsList', 'season', 'name']);
+            commit('SET_PRODUCT_PROPERTY_LIST', ['allProducts', 'sizesList', 'variants', 'size']);
+        },
         handleLogout({ commit }) {
             axios.post('/logout')
                 .then(() => {
                     commit('SET_USER', null);
                     window.localStorage.removeItem('user');
                 })
-                .catch(error => console.log(error));            
+                .catch(error => {
+                    if (error.response) {
+                        console.log(error.response);                        
+                    } else if (error.request) {
+                        console.log(error.request);
+                    } else {
+                        console.log('Error', error.message);
+                    }
+                });            
         },      
     },
     // getters: {
-    // 	doneTodos: state => {
-    // 	  return state.todos.filter(todo => todo.done)
-    // 	}
+    //     updatedProducts: state => {
+    //         return state.allProducts;
+    //     }
+    // }
 })
