@@ -36,7 +36,7 @@ export default {
     @import '../sass/front/_variables.scss';
 
    .app {
-    //    background-image: url('../images/drops_texture3.png');
+       background-image: url('../images/drops_texture3.png');
 
        .view {
            min-height: calc(100vh - (#{$headerHeight} + #{$footerHeight}));

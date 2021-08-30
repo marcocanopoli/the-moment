@@ -6114,7 +6114,9 @@
 
 .fa,.fas{
   font-weight:900
-}/*! tailwindcss v2.2.7 | MIT License | https://tailwindcss.com */
+}@charset "UTF-8";
+
+/*! tailwindcss v2.2.7 | MIT License | https://tailwindcss.com */
 
 /*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
 
@@ -38408,8 +38410,41 @@ input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #eef2ff inset;
 }
 
-:checked {
+input[type=checkbox] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+       appearance: none;
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  color: #fff;
+  border: 1px solid #9ca3af;
+  border-radius: 4px;
+  vertical-align: -2px;
+}
+
+input[type=checkbox]::before {
+  content: "\2713";
+  position: absolute;
+  font-size: 0.8rem;
+  left: 50%;
+  top: 50%;
+  transform: translate(-48%, -48%);
+  visibility: hidden;
+}
+
+input[type=checkbox]:checked {
+  border-color: #6366f1;
   background-color: #6366f1;
+}
+
+input[type=checkbox]:checked::before {
+  visibility: visible;
+}
+
+input[type=checkbox]:disabled {
+  border-color: #111827;
+  background-color: #4b5563;
 }
 
 @media (min-width: 640px){

@@ -1,7 +1,7 @@
 <template>
     <div class="carousel absolute flex justify-center items-center top-0 left-0 w-full h-full bg-white p-4 rounded-xl">
         <!-- parent transition -->
-        <transition name="carousel-fade"> 
+        <transition name="unzoom-fade"> 
             <img
                 class="currentImg h-full w-full object-cover rounded-md"
                 :src="'storage/' + images[sliderIndex].path" 

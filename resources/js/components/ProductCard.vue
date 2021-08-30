@@ -1,5 +1,8 @@
 <template>
-    <section class="product-card text-gray-600 pb-5 uppercase tracking-widest relative rounded-xl">
+    <section class="product-card text-gray-600 pb-5 uppercase tracking-widest relative rounded-xl"
+        v-show="product.variants.length > 0"
+        @mouseover="showSizes = true"
+        @mouseleave="showSizes = false">
 
         <!-- Discount-->
         <div class="discount absolute top-0 left-0"
@@ -15,12 +18,20 @@
             @mouseleave="showCarousel = false"
             @click="showProduct(product.id)">
 
-            <img 
+            <img v-show="imgLoaded"
                 class="w-full h-full absolute object-contain p-4"
                 :src="'storage/' + product.thumb" 
                 :alt="product.id + ' thumb'"
+                @load="imgLoaded = true"
             >
-            <transition name="carousel-fade">
+
+            <!-- Spinner -->
+            <div  class="w-full h-full absolute p-4 flex justify-center items-center">
+                <img v-show="!imgLoaded"  src="../../images/spinner.svg" alt="" class=" w-24 h-6">
+            </div>
+            <!-- /Spinner -->
+
+            <transition name="unzoom-fade">
                 <product-carousel 
                     v-if="showCarousel && product.prod_imgs.length > 0"
                     :images="product.prod_imgs" />         
@@ -30,29 +41,62 @@
         
         <!-- Details -->
         <div class="flex flex-col items-center space-y-1">
-            <span class="text-indigo-600">{{ product.anime.name }}</span>
+
+            <!-- Anime -->
+            <span class="text-indigo-500">{{ product.anime.name }}</span>
+            <!-- /Anime -->
+
+            <!-- Product name -->
             <span class="font-semibold">{{ product.name }}</span>
-            <span class="text-sm">{{ product.color }}</span>
-            <span class="text-sm font-semibold">&euro;{{ product.price }}</span>
+            <!-- /Product name -->
+
+            <!-- Color -->
+            <!-- <span class="text-sm">{{ product.color }}</span> -->
+            <!-- /Color -->
+
+            <!-- Sizes -->
+            <div class="overflow-hidden h-6 text-sm font-semibold text-gray-600">
+                <div v-if="showSizes">
+                    <span v-for="variant, index in product.variants"
+                        :key="variant.id">
+                        <span v-if="index < product.variants.length - 1">{{ variant.size }},&nbsp;</span>
+                        <span v-else >{{ variant.size }}</span>
+                    </span>
+                </div>
+            </div>
+            <!-- /Sizes -->
+
+            <!-- Price -->
+            <span class="text-sm font-semibold text-gray-100 bg-indigo-500 px-2 py-1 rounded-sm">&euro;{{ product.price }}</span>
+            <!-- /Price -->
 
             <!-- Alternative colors -->
             <div class="flex flex-wrap w-full justify-center space-x-2 pt-2"
                 v-if="filteredGroup.length > 0">
+
                 <!-- Single color -->
-                <div class="altColor w-1/6 cursor-pointer border-indigo-300 border-2"
+                <div class="alt-color w-1/6 cursor-pointer border-indigo-300 border-2 hover:bg-indigo-100"
                     v-for="altColor in filteredGroup"
                     :key="altColor.id"
                     @click="showProduct(altColor.id)">                    
                     <div class="alt-thumb relative">
-                        <img 
+                        <img v-show="altLoaded"
                             class="absolute p-2 object-contain"
                             :src="'storage/' + altColor.thumb" 
-                            :alt="altColor.color + ' thumb'">
+                            :alt="altColor.color + ' thumb'"
+                            @load="altLoaded = true">
+
+                        <!-- Spinner -->
+                        <div  class="w-full h-full absolute flex justify-center items-center">
+                            <img v-show="!altLoaded"  src="../../images/spinner.svg" alt="" class=" w-8 h-2">
+                        </div>
+                        <!-- /Spinner -->
                     </div>
                 </div>
                 <!-- /Single color -->
             </div>
             <!-- /Alternative colors -->
+
         </div>
         <!-- /Details -->
     </section>
@@ -74,7 +118,10 @@ export default {
             // prodGroup: [],
             filteredGroup: [],
             discount: 0,
-            showCarousel: false
+            showCarousel: false,
+            showSizes: false,
+            imgLoaded: false,
+            altLoaded: false
         }
     },
     methods: {
@@ -142,6 +189,10 @@ export default {
             padding-bottom: 100%;
             // /square div
         }
+
+        .alt-color {
+            transition: .4s;
+        }
     
         .burst-12 {
           background: theme('colors.red.600');
@@ -171,15 +222,15 @@ export default {
     
         }
     }
-
-    .carousel-fade-enter,
-    .carousel-fade-leave-active {
+    
+    .unzoom-fade-enter,
+    .unzoom-fade-leave-active {
         scale: 200%;
         opacity: 0;
     }
-    .carousel-fade-enter-active {
-    // .carousel-fade-leave-active {
-        transition: all .8s ease;
+    .unzoom-fade-enter-active {
+    // .unzoom-fade-leave-active {
+        transition: all .4s ease;
     }
 
 </style>

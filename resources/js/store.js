@@ -77,8 +77,9 @@ export const store = new Vuex.Store ({
                 }
             });
         },      
-        getSetProducts({ commit }) {
-            return axios.get('/api/products')
+        getSetProducts({ commit }, query = '') {
+            console.log(`/api/products${query}`);
+            return axios.get(`/api/products${query}`)
             .then(
                 res => {
                     commit('SET_PRODUCTS', res.data );

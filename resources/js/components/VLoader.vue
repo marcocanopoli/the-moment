@@ -35,8 +35,8 @@
                             repeatCount="indefinite" />
                 </circle>
             </svg>
-        <!-- </div> -->
         <!-- /Spinner -->
+        <!-- </div> -->
     </section>
 </template>
 
